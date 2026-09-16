@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [master, 'dev/**']
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: PHP 8.4 / ${{ matrix.db }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        db: [sqlite, pgsql, mysql]
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: efactura
+          POSTGRES_PASSWORD: efactura
+          POSTGRES_DB: efactura_test
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: efactura
+          MYSQL_DATABASE: efactura_test
+        ports: ['3306:3306']
+        options: --health-cmd "mysqladmin ping -pefactura" --health-interval 5s --health-timeout 5s --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, json, libxml, zip, pdo_sqlite, pdo_pgsql, pdo_mysql
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress
+
+      - run: vendor/bin/pint --test --parallel
+      - run: vendor/bin/phpstan analyse --no-progress
+
+      - name: Test
+        env:
+          EFACTURA_TEST_DB: ${{ matrix.db }}
+          EFACTURA_TEST_PGSQL_HOST: 127.0.0.1
+          EFACTURA_TEST_PGSQL_USER: efactura
+          EFACTURA_TEST_PGSQL_PASSWORD: efactura
+          EFACTURA_TEST_PGSQL_DATABASE: efactura_test
+          EFACTURA_TEST_MYSQL_HOST: 127.0.0.1
+          EFACTURA_TEST_MYSQL_USER: root
+          EFACTURA_TEST_MYSQL_PASSWORD: efactura
+          EFACTURA_TEST_MYSQL_DATABASE: efactura_test
+        run: vendor/bin/pest --ci

@@ -1,0 +1,98 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "atlasflow/efactura-ro-laravel",
+    "description": "Laravel bridge for atlasflow/efactura-ro: persisted ANAF authorisations, submissions with polling, the inbound e-Factura mailbox, jobs, events and artisan commands.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "efactura",
+        "e-factura",
+        "anaf",
+        "romania",
+        "e-invoicing",
+        "cius-ro",
+        "spv"
+    ],
+    "homepage": "https://github.com/atlasflow/efactura-ro-laravel",
+    "authors": [
+        {
+            "name": "AtlasFlow",
+            "homepage": "https://github.com/atlasflow"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/atlasflow/efactura-ro"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "atlasflow/efactura-ro": "^0.1.1",
+        "illuminate/bus": "^12.0 || ^13.0",
+        "illuminate/cache": "^12.0 || ^13.0",
+        "illuminate/console": "^12.0 || ^13.0",
+        "illuminate/contracts": "^12.0 || ^13.0",
+        "illuminate/database": "^12.0 || ^13.0",
+        "illuminate/encryption": "^12.0 || ^13.0",
+        "illuminate/events": "^12.0 || ^13.0",
+        "illuminate/filesystem": "^12.0 || ^13.0",
+        "illuminate/http": "^12.0 || ^13.0",
+        "illuminate/queue": "^12.0 || ^13.0",
+        "illuminate/routing": "^12.0 || ^13.0",
+        "illuminate/support": "^12.0 || ^13.0",
+        "nyholm/psr7": "^1.8",
+        "psr/http-client": "^1.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.18",
+        "orchestra/testbench": "^10.0 || ^11.0",
+        "pestphp/pest": "^3.0 || ^4.0 || ^5.0",
+        "phpstan/phpstan": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "AtlasFlow\\EFacturaRo\\Laravel\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AtlasFlow\\EFacturaRo\\Laravel\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AtlasFlow\\EFacturaRo\\Laravel\\EFacturaServiceProvider"
+            ],
+            "aliases": {
+                "EFactura": "AtlasFlow\\EFacturaRo\\Laravel\\Facades\\EFactura"
+            }
+        }
+    },
+    "scripts": {
+        "test": "@php vendor/bin/pest",
+        "test:pgsql": "EFACTURA_TEST_DB=pgsql @php vendor/bin/pest",
+        "test:mysql": "EFACTURA_TEST_DB=mysql @php vendor/bin/pest",
+        "lint": "@php vendor/bin/pint --parallel",
+        "lint:check": "@php vendor/bin/pint --parallel --test",
+        "analyse": "@php vendor/bin/phpstan analyse",
+        "ci:check": [
+            "Composer\\Config::disableProcessTimeout",
+            "@lint:check",
+            "@analyse",
+            "@php vendor/bin/pest --ci"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
