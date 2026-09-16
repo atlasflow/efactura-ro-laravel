@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<header xmlns="mfp:anaf:dgti:spv:respUploadFisier:v1" dateResponse="202108051144" ExecutionStatus="1">
+    <Errors errorMessage="Marime fisier transmis mai mare de 10 MB."/>
+</header>
