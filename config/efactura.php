@@ -93,6 +93,9 @@ return [
         'enabled' => (bool) env('EFACTURA_ROUTES', false),
         'prefix' => 'efactura',
         'middleware' => ['web', 'auth'],
+        // Refuse a callback without the `state` nonce (CSRF guard). Turn off only once you
+        // have confirmed ANAF does not round-trip `state`; the session check then stands alone.
+        'require_state' => true,
     ],
 
 ];

@@ -6,18 +6,25 @@ namespace AtlasFlow\EFacturaRo\Laravel\Http\Controllers;
 
 use AtlasFlow\EFacturaRo\Laravel\Services\AuthorisationManager;
 use AtlasFlow\EFacturaRo\Support\Cui;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * GET {prefix}/callback?code=…[&state=…] — complete the ceremony for the
- * CUI remembered at /authorise. `state` is checked when ANAF sends it back
- * and not required, because whether it round-trips is unconfirmed.
+ * GET {prefix}/callback?code=…&state=… — complete the ceremony for the CUI
+ * remembered at /authorise.
+ *
+ * The `state` nonce is what ties ANAF's answer to the session that started
+ * the ceremony; without it a crafted callback link could bind an attacker's
+ * ANAF authorisation to a victim's CUI. It is therefore required by default.
+ * Whether ANAF round-trips `state` is not yet confirmed; an operator who
+ * has established that it does not can set `efactura.routes.require_state`
+ * to false, accepting that the session check alone then guards the callback.
  */
 final class CallbackController
 {
-    public function __invoke(Request $request, AuthorisationManager $authorisations): JsonResponse
+    public function __invoke(Request $request, AuthorisationManager $authorisations, Repository $config): JsonResponse
     {
         $pending = $request->session()->pull('efactura.authorising');
 
@@ -25,7 +32,13 @@ final class CallbackController
             throw new HttpException(400, 'No authorisation was started in this session.');
         }
 
-        if ($request->filled('state') && $request->query('state') !== $pending['nonce']) {
+        $requireState = (bool) $config->get('efactura.routes.require_state', true);
+
+        if ($requireState && ! $request->filled('state')) {
+            throw new HttpException(400, 'ANAF sent no state; the callback cannot be tied to the authorisation that was started.');
+        }
+
+        if ($request->filled('state') && ! hash_equals((string) $pending['nonce'], (string) $request->query('state'))) {
             throw new HttpException(400, 'The state does not match the authorisation that was started.');
         }
 

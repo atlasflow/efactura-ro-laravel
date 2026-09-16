@@ -43,6 +43,7 @@ final class InboxMessage extends Model
             'anaf_created_at' => 'immutable_datetime',
             'parsed_at' => 'immutable_datetime',
             'document_date' => 'immutable_date',
+            'document_total' => 'decimal:2',
         ];
     }
 }
