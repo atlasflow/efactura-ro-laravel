@@ -1,0 +1,4 @@
+{"mesaje":[
+ {"data_creare":"202210311452","cif":"12345674","id_solicitare":"5001120362","detalii":"Erori de validare identificate la factura primita cu id_incarcare=5001120362","tip":"ERORI FACTURA","id":"3001474425"},
+ {"data_creare":"202210311452","cif":"12345674","id_solicitare":"5001120366","detalii":"Erori de validare identificate la factura primita cu id_incarcare=5001120366","tip":"ERORI FACTURA","id":"3001474424"}
+],"numar_inregistrari_in_pagina":2,"numar_total_inregistrari_per_pagina":500,"numar_total_inregistrari":14130,"numar_total_pagini":29,"index_pagina_curenta":29,"serial":"1234AA456","cui":"12345674","titlu":"Lista Mesaje disponibile din intervalul 06-09-2022 09:48:20 - 02-11-2022 11:49:24"}

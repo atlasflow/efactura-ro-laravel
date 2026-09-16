@@ -1,0 +1,6 @@
+{"mesaje":[
+ {"data_creare":"202609151452","cif":"12345674","id_solicitare":"5001130147","detalii":"Factura cu id_incarcare=5001130147 emisa de cif_emitent=12345674 pentru cif_beneficiar=40000000","tip":"FACTURA TRIMISA","id":"3001293434"},
+ {"data_creare":"202609151510","cif":"12345674","id_solicitare":"5001120362","detalii":"Erori de validare identificate la factura primita cu id_incarcare=5001120362","tip":"ERORI FACTURA","id":"3001474425"},
+ {"data_creare":"202609151600","cif":"12345674","id_solicitare":"5001130200","detalii":"Factura cu id_incarcare=5001130200 emisa de cif_emitent=11223342 pentru cif_beneficiar=12345674","tip":"FACTURA PRIMITA","id":"3001293500","cif_emitent":"11223342","cif_beneficiar":"12345674"},
+ {"data_creare":"202609151700","cif":"12345674","id_solicitare":"5001130147","detalii":"Mesaj cumparator pentru factura cu id_incarcare=5001130147","tip":"MESAJ CUMPARATOR PRIMIT","id":"3001293600"}
+],"serial":"1234AA456","cui":"12345674","titlu":"Lista Mesaje disponibile din ultimele 5 zile"}
